@@ -162,9 +162,9 @@
         <section class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
             <div class="sphere sphere-top"></div>
             
-            <!-- World Map and Animated Paths (Detailed Snippet Implementation) -->
-            <div class="absolute inset-0 z-0 flex items-center justify-center opacity-[0.5] pointer-events-none">
-                <div class="relative w-full max-w-[1200px] h-full flex items-center justify-center">
+            <!-- World Map and Animated Paths -->
+            <div class="absolute inset-x-0 top-1/2 -translate-y-[45%] z-0 flex items-center justify-center opacity-[0.5] pointer-events-none">
+                <div class="relative w-full max-w-[1200px] flex items-center justify-center">
                     <img src="assets/map.svg" alt="World Map" class="w-full h-auto object-contain brightness-110 [mask-image:linear-gradient(to_bottom,transparent,white_20%,white_80%,transparent)]">
                     
                     <div class="absolute inset-0 w-full h-full flex justify-center">
@@ -313,7 +313,7 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-20 items-center">
-                    <div class="animate-up">
+                    <div class="animate-up flex flex-col justify-center h-full">
                         <div class="space-y-8 text-lg text-slate-500 leading-relaxed font-medium">
                             <p>We are a leading IT infrastructure and cybersecurity solutions provider delivering end-to-end technology services to enterprises, SMEs, and government entities. With over 15 years of regional expertise, we combine certified engineering talent with best-in-class technology partnerships to build secure, resilient, and future-ready IT environments.</p>
                             <p>From structured cabling and server rooms to cloud migrations and 24/7 SOC monitoring, our team handles every layer of your technology stack — allowing you to focus on your core business.</p>
@@ -366,7 +366,7 @@
                     </div>
 
                     <!-- Row 2 -->
-                    <div class="md:col-span-1 card-light p-10 rounded-[2rem] animate-up" style="transition-delay: 200ms text-center md:text-left">
+                    <div class="md:col-span-1 card-light p-10 rounded-[2rem] animate-up flex flex-col" style="transition-delay: 200ms">
                         <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 mb-8 mx-auto md:mx-0">03</div>
                         <h4 class="text-xl font-black text-slate-900 mb-4 tracking-tight uppercase">Networking</h4>
                         <p class="text-slate-500 text-sm leading-relaxed">Structured cabling and enterprise networking that forms your secure backbone.</p>
@@ -409,7 +409,7 @@
                         <p class="text-slate-500 text-sm leading-relaxed">Proactive monitoring and service management to maximize uptime.</p>
                     </div>
                     <div class="md:col-span-1 card-light p-10 rounded-[2rem] animate-up" style="transition-delay: 900ms">
-                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 mb-8 text-center">10</div>
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 mb-8">10</div>
                         <h4 class="text-xl font-black text-slate-900 mb-4 tracking-tight uppercase">Recovery</h4>
                         <p class="text-slate-500 text-sm leading-relaxed">Robust backup and DR strategies to keep your business running.</p>
                     </div>
@@ -459,13 +459,13 @@
                     
                     <div class="bg-white/5 p-12 rounded-[3rem] border border-white/10 animate-up" style="transition-delay: 200ms">
                          <span class="text-white/20 text-[10px] font-black uppercase tracking-[0.5em] mb-10 block">Industries We Serve</span>
-                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Banking & Finance</div>
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Retail & E-Commerce</div>
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Healthcare</div>
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Manufacturing</div>
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Education</div>
-                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5">Government</div>
+                         <div class="grid grid-cols-2 gap-4 h-full content-start">
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Banking & Finance</div>
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Retail & E-Commerce</div>
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Healthcare</div>
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Manufacturing</div>
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Education</div>
+                            <div class="bg-white/5 p-5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-brand transition-colors border border-white/5 flex items-center justify-center text-center">Government</div>
                          </div>
                     </div>
                 </div>
