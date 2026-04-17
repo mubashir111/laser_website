@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LICC Technology | Holistic Cyber Protection & IT Infrastructure</title>
+    <meta name="description" content="LICC Technology - End-to-end IT Infrastructure & Cybersecurity Solutions.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F172A', // Deep Slate for text
+                        brand: '#0d9488', // Teal from logo
+                        accent: '#be123b', // Red from logo
+                        'brand-light': '#14b8a6',
+                        'light-bg': '#F8FAFC', // Slate 50
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        body {
+            background-color: #F8FAFC;
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* High-End Subtle Mesh Grid */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* The Celestial Sphere (Light Teal/White Gradient) */
+        .sphere {
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle at center, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 50%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .sphere-top {
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom: 2px solid rgba(13, 148, 136, 0.1);
+        }
+
+        .sphere-bottom {
+            bottom: -400px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 2px solid rgba(190, 18, 59, 0.1);
+        }
+
+        .glass-header {
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .card-light {
+            background: #FFFFFF;
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-light:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            transform: translateY(-4px);
+            border-color: rgba(13, 148, 136, 0.2);
+        }
+
+        .pill-input-wrap {
+            background: #FFFFFF;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .animate-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes drawGridLines {
+            from { stroke-dashoffset: 1; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animate-draw-lines {
+            animation: drawGridLines 3s ease-out forwards;
+        }
+
+        .text-glow-light {
+            text-shadow: 0 0 20px rgba(13, 148, 136, 0.1);
+        }
+    </style>
+</head>
+<body x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)">
+
+    <div class="grid-bg"></div>
+
+    <!-- Header -->
+    <header :class="scrolled ? 'glass-header py-4 shadow-sm' : 'bg-transparent py-10'" class="fixed w-full z-50 transition-all duration-700">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-4 group">
+                <img src="assets/logo.jpg" alt="LICC Logo" class="h-10 w-auto group-hover:scale-105 transition-transform duration-500">
+                <div class="hidden md:block h-6 w-px bg-slate-200 mx-2"></div>
+                <span class="hidden md:block text-xs font-black uppercase tracking-[0.4em] text-slate-400 group-hover:text-brand transition-colors">Shield</span>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-12 text-[10px] uppercase tracking-[0.25em] font-black text-slate-500">
+                <a href="#solutions" class="hover:text-brand transition-colors">Solutions</a>
+                <a href="#product" class="hover:text-brand transition-colors">Product</a>
+                <a href="#partner" class="hover:text-brand transition-colors">Partner</a>
+                <a href="#about" class="hover:text-brand transition-colors">About</a>
+            </nav>
+
+            <div class="flex items-center gap-8">
+                <a href="#" class="hidden sm:block text-[10px] font-black text-slate-500 hover:text-brand uppercase tracking-widest transition-colors">Client Portal</a>
+                <a href="#contact" class="px-8 py-3 bg-accent hover:bg-[#a00f32] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full transition-all shadow-lg shadow-accent/10 hover:scale-105 active:scale-95">Get a Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-32">
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+            <div class="sphere sphere-top"></div>
+            
+            <!-- World Map and Animated Paths (Detailed Snippet Implementation) -->
+            <div class="absolute inset-0 z-0 flex items-center justify-center opacity-[0.5] pointer-events-none">
+                <div class="relative w-full max-w-[1200px] h-full flex items-center justify-center">
+                    <img src="assets/map.svg" alt="World Map" class="w-full h-auto object-contain brightness-110 [mask-image:linear-gradient(to_bottom,transparent,white_20%,white_80%,transparent)]">
+                    
+                    <div class="absolute inset-0 w-full h-full flex justify-center">
+                        <svg viewBox="0 0 800 400" class="w-full max-w-[1100px] h-auto pointer-events-none select-none">
+                            <defs>
+                                <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#0d9488" stop-opacity="0"></stop>
+                                    <stop offset="5%" stop-color="#0d9488" stop-opacity="1"></stop>
+                                    <stop offset="95%" stop-color="#0d9488" stop-opacity="1"></stop>
+                                    <stop offset="100%" stop-color="#0d9488" stop-opacity="0"></stop>
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Paths -->
+                            <g>
+                                <path class="animate-draw-lines" d="M 67.79177777777781 57.33155555555555 Q 102.51400000000001 7.331555555555553 137.2362222222222 124.32844444444446" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            <g>
+                                <path class="animate-draw-lines" style="animation-delay: 0.5s" d="M 67.79177777777781 57.33155555555555 Q 180.6826666666667 7.331555555555553 293.5735555555556 235.10555555555555" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            <g>
+                                <path class="animate-draw-lines" style="animation-delay: 1.0s" d="M 293.5735555555556 235.10555555555555 Q 336.63200000000006 63.95044444444446 379.6904444444445 113.95044444444446" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            <g>
+                                <path class="animate-draw-lines" style="animation-delay: 1.5s" d="M 399.716 85.53911111111113 Q 485.6457777777778 35.539111111111126 571.5755555555556 136.41355555555555" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            <g>
+                                <path class="animate-draw-lines" style="animation-delay: 2.0s" d="M 571.5755555555556 136.41355555555555 Q 632.3558888888889 54.14844444444445 693.1362222222222 104.14844444444445" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            <g>
+                                <path class="animate-draw-lines" style="animation-delay: 2.5s" d="M 571.5755555555556 136.41355555555555 Q 526.701 86.41355555555555 481.82644444444446 202.87133333333335" fill="none" stroke="url(#path-gradient)" stroke-width="1" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+                            </g>
+                            
+                            <!-- Pulsing Nodes -->
+                            <g>
+                                <circle cx="67.79177777777781" cy="57.33155555555555" r="2" fill="#0d9488"></circle>
+                                <circle cx="67.79177777777781" cy="57.33155555555555" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                            <g>
+                                <circle cx="137.2362222222222" cy="124.32844444444446" r="2" fill="#0d9488"></circle>
+                                <circle cx="137.2362222222222" cy="124.32844444444446" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                            <g>
+                                <circle cx="293.5735555555556" cy="235.10555555555555" r="2" fill="#0d9488"></circle>
+                                <circle cx="293.5735555555556" cy="235.10555555555555" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                            <g>
+                                <circle cx="379.6904444444445" cy="113.95044444444446" r="2" fill="#0d9488"></circle>
+                                <circle cx="379.6904444444445" cy="113.95044444444446" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                            <g>
+                                <circle cx="571.5755555555556" cy="136.41355555555555" r="2" fill="#0d9488"></circle>
+                                <circle cx="571.5755555555556" cy="136.41355555555555" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                            <g>
+                                <circle cx="693.1362222222222" cy="104.14844444444445" r="2" fill="#0d9488"></circle>
+                                <circle cx="693.1362222222222" cy="104.14844444444445" r="2" fill="#0d9488" opacity="0.5">
+                                    <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite"></animate>
+                                </circle>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="animate-up relative z-10" x-data="{ show: false }" x-init="setTimeout(() => show = true, 100)" :class="show && 'visible'">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.85] text-glow-light">
+                    Holistic <br>
+                    <span class="text-brand">Cyber Protection</span> <br>
+                    <span class="text-5xl md:text-7xl lg:text-8xl">in a Single Console</span>
+                </h1>
+                
+                <p class="text-base md:text-xl text-slate-500 max-w-2xl mx-auto mb-14 leading-relaxed font-medium tracking-wide">
+                    Gain real-time visibility into your systems and stop risks before they spread. 
+                    Think of it as your all-in-one <span class="text-slate-900 font-bold">cyber defense command center</span>.
+                </p>
+
+                <div class="pill-input-wrap flex items-center p-2 rounded-full max-w-lg mx-auto mb-8 transition-all hover:ring-4 hover:ring-brand/5">
+                    <input type="email" placeholder="Enter your business email" class="bg-transparent flex-1 px-8 text-sm text-slate-900 focus:outline-none placeholder:text-slate-300">
+                    <button class="px-10 py-4 bg-brand hover:bg-brand-light text-white text-[10px] font-black uppercase tracking-widest rounded-full transition-all shadow-lg active:scale-95">Get Demo</button>
+                </div>
+                
+                <div class="flex items-center justify-center gap-6">
+                    <p class="text-[10px] text-slate-400 uppercase tracking-[0.3em] font-bold">Enterprise Grade</p>
+                    <span class="w-1.5 h-1.5 bg-slate-200 rounded-full"></span>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-[0.3em] font-bold">ISO 27001 Compliant</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Logo Bar -->
+        <section class="py-24 bg-white border-y border-slate-100">
+            <div class="container mx-auto px-6">
+                 <p class="text-center text-[10px] font-black text-slate-300 mb-14 uppercase tracking-[0.5em]">Global Technology Partnerships</p>
+                 <div class="flex flex-wrap justify-center items-center gap-16 md:gap-32 opacity-40 grayscale transition-all hover:opacity-100 hover:grayscale-0">
+                    <img src="https://logoipsum.com/assets/all/logo-1.svg" alt="Partner" class="h-6">
+                    <img src="https://logoipsum.com/assets/all/logo-2.svg" alt="Partner" class="h-6">
+                    <img src="https://logoipsum.com/assets/all/logo-3.svg" alt="Partner" class="h-6">
+                    <img src="https://logoipsum.com/assets/all/logo-4.svg" alt="Partner" class="h-6">
+                    <img src="https://logoipsum.com/assets/all/logo-5.svg" alt="Partner" class="h-6">
+                 </div>
+            </div>
+        </section>
+
+        <!-- Solutions Grid -->
+        <section id="solutions" class="py-40 bg-slate-50/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-32 animate-up">
+                    <span class="px-6 py-2 bg-white shadow-sm border border-slate-100 rounded-full text-[10px] uppercase font-black tracking-[0.4em] text-brand mb-8 inline-block">Innovating Defense</span>
+                    <h2 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">Hardware Agnostic <br> Protection Overlay</h2>
+                </div>
+
+                <div class="grid md:grid-cols-12 gap-16 items-center">
+                    <div class="md:col-span-12 lg:col-span-5 animate-up">
+                        <div class="space-y-10">
+                            <div>
+                                <h3 class="text-4xl font-black text-slate-900 mb-6 tracking-tight leading-tight">Unified <span class="text-brand">Visibility</span></h3>
+                                <p class="text-lg text-slate-500 leading-relaxed">
+                                    LICC Shield provides a comprehensive solution for securing mission-critical data across all enterprise endpoints with zero latency.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-brand/5 flex items-center justify-center text-brand flex-shrink-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 mb-1">Quantum Encryption</h4>
+                                        <p class="text-sm text-slate-500">AES-256-GCM standards for all data in transit.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-accent/5 flex items-center justify-center text-accent flex-shrink-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 mb-1">Auto-Scaling Nodes</h4>
+                                        <p class="text-sm text-slate-500">Global edge infrastructure that scales with your growth.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-12 lg:col-span-7 animate-up">
+                        <div class="card-light p-2 rounded-[2.5rem]">
+                            <div class="bg-slate-900 p-10 rounded-[2.2rem] shadow-2xl relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 p-4 opacity-50">
+                                    <div class="flex gap-2">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                                    </div>
+                                </div>
+                                <pre class="font-mono text-xs md:text-sm leading-8 text-slate-300">
+<span class="text-slate-500 italic">// LICC Global Defense Core</span>
+<span class="text-teal-400">const</span> <span class="text-white">secureLayer</span> = <span class="text-teal-400">new</span> <span class="text-white">Infrastructure</span>({
+    <span class="text-slate-400">mode</span>: <span class="text-pink-400">'light-mode-optimized'</span>,
+    <span class="text-slate-400">encryption</span>: <span class="text-pink-400">'AES-256-GCM'</span>,
+    <span class="text-slate-400">monitoring</span>: <span class="text-teal-400">true</span>,
+    <span class="text-slate-400">autoScale</span>: <span class="text-teal-400">true</span>
+});
+
+<span class="text-white">secureLayer</span>.<span class="text-teal-400">deploy</span>().<span class="text-white">then</span>(() => {
+    <span class="text-white">console</span>.<span class="text-teal-400">log</span>(<span class="text-pink-400">"Network: 100% Guarded"</span>);
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Services -->
+        <section class="py-40">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card-light p-10 rounded-3xl animate-up">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 mb-8">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-4">Cloud Identity</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Secure your hybrid workforce with seamless IAM integrations and ZTNA policies.</p>
+                    </div>
+                    <div class="card-light p-10 rounded-3xl animate-up" style="transition-delay: 100ms">
+                        <div class="w-12 h-12 rounded-2xl bg-pink-50 flex items-center justify-center text-pink-600 mb-8">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-4">Endpoint Security</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Multi-layered defense for all enterprise devices, catching threats at the source.</p>
+                    </div>
+                    <div class="card-light p-10 rounded-3xl animate-up" style="transition-delay: 200ms">
+                         <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-600 mb-8">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-4">SOC Monitoring</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">24/7 visibility into your global network with human-expert incident response.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Testimonial -->
+        <section class="py-40">
+            <div class="container mx-auto px-6">
+                <div class="bg-white p-12 md:p-24 rounded-[4rem] border border-slate-100 shadow-2xl flex flex-col lg:flex-row gap-20 items-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-96 h-96 bg-brand/5 blur-[120px] pointer-events-none"></div>
+                    
+                    <div class="lg:w-1/2 relative z-10">
+                        <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-10 tracking-tight">Visionary Support for Visionary Leaders</h2>
+                        <blockquote class="text-2xl text-slate-600 italic mb-12 font-medium leading-relaxed">
+                            "I have not seen anything else in the current landscape that can provide our team with this much peace of mind."
+                        </blockquote>
+                        <div class="flex items-center gap-5">
+                            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-300">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-lg font-black text-slate-900">Samantha Goya</p>
+                                <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">Global CISO</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-1/2 relative group w-full">
+                        <div class="aspect-video bg-slate-50 rounded-[2.5rem] border border-slate-100 overflow-hidden relative shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover opacity-60">
+                            <button class="absolute inset-0 m-auto w-24 h-24 bg-white rounded-full flex items-center justify-center text-brand shadow-2xl hover:bg-brand hover:text-white transition-all hover:scale-110 active:scale-95 group-hover:shadow-brand/20">
+                                <svg class="w-10 h-10 fill-current ml-2" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-40 text-center relative">
+            <div class="sphere sphere-bottom"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <h2 class="text-5xl md:text-8xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.9]">Define, Encrypt, <br> <span class="text-accent underline decoration-slate-200 underline-offset-[16px]">Deploy.</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto mb-16 text-sm font-medium leading-loose">Securing your enterprise future today with LICC's industry-standard infrastructure solutions.</p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="#contact" class="px-12 py-5 bg-accent hover:bg-brand text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-all shadow-xl shadow-accent/10 hover:scale-105 active:scale-95">Get a Demo Today</a>
+                    <a href="#solutions" class="px-12 py-5 bg-white border border-slate-200 text-slate-900 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-all hover:bg-slate-50 active:scale-95">Our Solutions</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative pt-60 pb-20 bg-white border-t border-slate-100">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-y-24 gap-x-12">
+                <div class="col-span-2">
+                    <img src="assets/logo.jpg" alt="LICC Logo" class="h-10 w-auto mb-10">
+                    <p class="text-[11px] text-slate-400 max-w-xs leading-loose font-medium">
+                        LICC Technology: Powering global business through hardened infrastructure and predictive cyber security solutions.
+                    </p>
+                    <div class="flex gap-4 mt-10">
+                        <div class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-brand cursor-pointer transition-colors">LI</div>
+                        <div class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-brand cursor-pointer transition-colors">X</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-10">Solutions</h5>
+                    <ul class="space-y-4 text-[11px] font-bold text-slate-400">
+                        <li><a href="#" class="hover:text-brand transition-colors">Infrastructure</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Cybersecurity</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Managed Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-10">Company</h5>
+                    <ul class="space-y-4 text-[11px] font-bold text-slate-400">
+                        <li><a href="#" class="hover:text-brand transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Our Team</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-10">Support</h5>
+                    <ul class="space-y-4 text-[11px] font-bold text-slate-400">
+                        <li><a href="#" class="hover:text-brand transition-colors">Terms</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-brand transition-colors">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-40 pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
+                <p class="text-[9px] text-slate-300 uppercase font-black tracking-[0.5em]">© 2025 LICC TECHNOLOGY. ALL RIGHTS RESERVED.</p>
+                <div class="flex gap-10 text-[9px] text-slate-300 font-black uppercase tracking-widest">
+                    <a href="#" class="hover:text-slate-900">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-900">Compliance</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Intersection Observer -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
