@@ -24,15 +24,11 @@
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        [x-cloak] {
-            display: none !important
-        }
-
         *,
         *::before,
         *::after {
@@ -49,6 +45,15 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             cursor: none
+        }
+
+        body.cursor-disabled {
+            cursor: auto
+        }
+
+        body.cursor-disabled #cursor-dot,
+        body.cursor-disabled #cursor-ring {
+            display: none
         }
 
         /* ── CUSTOM CURSOR ── */
@@ -587,10 +592,39 @@
         .nav-link:hover::after {
             width: 100%
         }
+
+        .social-link {
+            color: #475569
+        }
+
+        .hero-ready {
+            opacity: 1 !important;
+            transform: translateY(0) !important
+        }
+
+        @media (pointer: coarse),
+        (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto
+            }
+
+            body {
+                cursor: auto
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important
+            }
+        }
     </style>
 </head>
 
-<body x-data="{scrolled:false,mobileOpen:false}" @scroll.window="scrolled=(window.pageYOffset>60)">
+<body>
 
     <!-- CUSTOM CURSOR -->
     <div id="cursor-dot"></div>
@@ -601,12 +635,11 @@
     <!-- ══════════════════════════════════════════════
      HEADER
 ══════════════════════════════════════════════ -->
-    <header :class="scrolled?'glass-header py-3':'bg-transparent py-7'"
-        class="fixed w-full z-50 transition-all duration-500">
+    <header id="siteHeader" class="fixed w-full z-50 py-7 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
             <a href="#" class="flex items-center gap-3 group flex-shrink-0">
-                <img src="assets/logo.png" alt="Laser"
+                <img src="assets/logo.png" alt="Laser" width="1172" height="392" fetchpriority="high"
                     class="h-9 lg:h-12 w-auto group-hover:scale-105 transition-transform duration-300">
                 <div class="hidden md:flex flex-col">
                     <span
@@ -631,25 +664,27 @@
                     <span
                         class="absolute inset-0 bg-gradient-to-r from-accent-light to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </a>
-                <button @click="mobileOpen=!mobileOpen"
+                <button id="mobileMenuButton" type="button" aria-label="Open navigation menu" aria-expanded="false"
+                    aria-controls="mobileMenu"
                     class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        <path id="mobileMenuIconOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
-                        <path x-show="mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        <path id="mobileMenuIconClose" class="hidden" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
                             d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
         </div>
-        <div x-show="mobileOpen" x-transition
+        <div id="mobileMenu" hidden
             class="lg:hidden glass border-t border-slate-100 mt-2 mx-4 rounded-2xl shadow-xl">
             <nav class="p-6 flex flex-col gap-5 text-[11px] uppercase font-black tracking-widest text-slate-500">
-                <a href="#about" @click="mobileOpen=false" class="hover:text-brand transition-colors">About</a>
-                <a href="#services" @click="mobileOpen=false" class="hover:text-brand transition-colors">Services</a>
-                <a href="#process" @click="mobileOpen=false" class="hover:text-brand transition-colors">Process</a>
-                <a href="#why-us" @click="mobileOpen=false" class="hover:text-brand transition-colors">Why Us</a>
-                <a href="#contact" @click="mobileOpen=false" class="hover:text-brand transition-colors">Contact</a>
+                <a href="#about" class="mobile-nav-link hover:text-brand transition-colors">About</a>
+                <a href="#services" class="mobile-nav-link hover:text-brand transition-colors">Services</a>
+                <a href="#process" class="mobile-nav-link hover:text-brand transition-colors">Process</a>
+                <a href="#why-us" class="mobile-nav-link hover:text-brand transition-colors">Why Us</a>
+                <a href="#contact" class="mobile-nav-link hover:text-brand transition-colors">Contact</a>
             </nav>
         </div>
     </header>
@@ -669,7 +704,7 @@
             <!-- WORLD MAP -->
             <div class="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
                 <div class="relative w-full max-w-5xl">
-                    <img src="assets/map.svg" alt=""
+                    <img src="assets/map.svg" alt="" aria-hidden="true" fetchpriority="low"
                         class="w-full h-auto [mask-image:linear-gradient(to_bottom,transparent_5%,white_22%,white_78%,transparent_95%)] brightness-110 saturate-0">
                     <div class="absolute inset-0 flex justify-center">
                         <svg viewBox="0 0 800 400" class="w-full max-w-5xl h-auto">
@@ -754,11 +789,10 @@
             </div>
 
             <!-- HERO CONTENT -->
-            <div class="relative z-10 max-w-5xl mx-auto" x-data="{s:false}" x-init="setTimeout(()=>s=true,80)">
+            <div id="heroContent" class="relative z-10 max-w-5xl mx-auto">
 
                 <!-- Live badge -->
-                <div :class="s&&'opacity-100 translate-y-0'"
-                    class="opacity-0 translate-y-4 transition-all duration-700 mb-10 flex justify-center">
+                <div class="hero-reveal opacity-0 translate-y-4 transition-all duration-700 mb-10 flex justify-center">
                     <div class="flex items-center gap-2 glass px-6 py-3 rounded-full shadow-md">
                         <span class="live-dot"></span>
                         <span class="text-[10px] font-black uppercase tracking-[.38em] text-slate-600">24/7 Active
@@ -770,7 +804,7 @@
                 </div>
 
                 <!-- Animated headline -->
-                <div :class="s&&'opacity-100'" class="opacity-0 transition-all duration-300 delay-100 mb-7">
+                <div class="hero-reveal opacity-0 transition-all duration-300 delay-100 mb-7">
                     <h1
                         class="text-5xl sm:text-7xl md:text-[88px] lg:text-[104px] font-black tracking-tighter leading-[.87] text-slate-900">
                         <span class="hero-word"><span style="animation-delay:.15s">Your</span></span>
@@ -785,8 +819,7 @@
                     </h1>
                 </div>
 
-                <div :class="s&&'opacity-100 translate-y-0'"
-                    class="opacity-0 translate-y-6 transition-all duration-700 delay-700">
+                <div class="hero-reveal opacity-0 translate-y-6 transition-all duration-700 delay-700">
                     <p class="text-base md:text-lg text-slate-500 max-w-xl mx-auto mb-12 leading-relaxed font-medium">
                         From end-user devices to cloud identity, we design, deploy, and manage complete IT ecosystems —
                         so your business never skips a beat.
@@ -794,8 +827,8 @@
                 </div>
 
                 <!-- CTAs -->
-                <div :class="s&&'opacity-100 translate-y-0'"
-                    class="opacity-0 translate-y-6 transition-all duration-700 delay-[900ms] flex flex-col sm:flex-row gap-4 justify-center mb-20">
+                <div
+                    class="hero-reveal opacity-0 translate-y-6 transition-all duration-700 delay-[900ms] flex flex-col sm:flex-row gap-4 justify-center mb-20">
                     <a href="#contact"
                         class="group relative overflow-hidden px-10 py-5 bg-gradient-to-r from-brand to-brand-light text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-xl shadow-brand/25 hover:shadow-brand/40 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3">
                         <span class="relative z-10 flex items-center gap-3">
@@ -820,8 +853,7 @@
                 </div>
 
                 <!-- STAT CARDS -->
-                <div :class="s&&'opacity-100 translate-y-0'"
-                    class="opacity-0 translate-y-6 transition-all duration-700 delay-[1100ms]">
+                <div class="hero-reveal opacity-0 translate-y-6 transition-all duration-700 delay-[1100ms]">
                     <div
                         class="glass rounded-3xl shadow-2xl shadow-slate-200/60 border border-white/70 max-w-4xl mx-auto overflow-hidden">
                         <div class="grid grid-cols-2 md:grid-cols-4">
@@ -906,6 +938,12 @@
                         <img src="images/clients/sinohydro.png" alt="Sinohydro" class="h-14 w-auto object-contain">
                         <img src="images/clients/spark.png" alt="Spark" class="h-14 w-auto object-contain">
                         <img src="images/clients/tamimi.png" alt="Tamimi" class="h-14 w-auto object-contain">
+                        <img src="images/clients/Aljeathen.jpeg" alt="Aljeathen" class="h-14 w-auto object-contain">
+                        <img src="images/clients/BinKhamis.png" alt="Bin Khamis" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c1.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c2.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c3.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c4.png" alt="Client Logo" class="h-14 w-auto object-contain">
                     </div>
                     <div class="flex items-center gap-20 px-10" aria-hidden="true">
                         <img src="images/clients/Air_Products-1.png" alt="Air Products"
@@ -929,6 +967,12 @@
                         <img src="images/clients/sinohydro.png" alt="Sinohydro" class="h-14 w-auto object-contain">
                         <img src="images/clients/spark.png" alt="Spark" class="h-14 w-auto object-contain">
                         <img src="images/clients/tamimi.png" alt="Tamimi" class="h-14 w-auto object-contain">
+                        <img src="images/clients/Aljeathen.jpeg" alt="Aljeathen" class="h-14 w-auto object-contain">
+                        <img src="images/clients/BinKhamis.png" alt="Bin Khamis" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c1.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c2.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c3.png" alt="Client Logo" class="h-14 w-auto object-contain">
+                        <img src="images/clients/c4.png" alt="Client Logo" class="h-14 w-auto object-contain">
                     </div>
                 </div>
             </div>
@@ -970,20 +1014,45 @@
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-300 mb-6">Our Proven
                                 Methodology</p>
                             <div class="flex flex-wrap gap-3">
-                                <template x-for="(s,i) in ['Assess','Design','Deploy','Test','Document','Support']"
-                                    :key="i">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand"
-                                            x-text="i+1"></div>
-                                        <span class="text-[11px] font-black uppercase tracking-widest text-slate-600"
-                                            x-text="s"></span>
-                                        <svg x-show="i<5" class="w-3 h-3 text-slate-200" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </div>
-                                </template>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">1</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Assess</span>
+                                    <svg class="w-3 h-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">2</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Design</span>
+                                    <svg class="w-3 h-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">3</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Deploy</span>
+                                    <svg class="w-3 h-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">4</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Test</span>
+                                    <svg class="w-3 h-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">5</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Document</span>
+                                    <svg class="w-3 h-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand/15 to-brand/5 border border-brand/25 flex items-center justify-center text-[9px] font-black text-brand">6</div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-600">Support</span>
+                                </div>
                             </div>
                         </div>
 
@@ -1008,8 +1077,8 @@
                                         d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                                 </svg>
                             </div>
-                            <h4 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
-                                Cisco, Microsoft &amp; Fortinet Certified</h4>
+                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
+                                Cisco, Microsoft &amp; Fortinet Certified</h3>
                         </div>
                         <div
                             class="grad-border p-7 rounded-2xl hover:shadow-xl hover:shadow-brand/8 transition-all duration-300 group hover:-translate-y-1 bg-white">
@@ -1020,8 +1089,8 @@
                                         d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
                                 </svg>
                             </div>
-                            <h4 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
-                                Vendor-Agnostic Approach</h4>
+                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
+                                Vendor-Agnostic Approach</h3>
                         </div>
                         <div
                             class="grad-border p-7 rounded-2xl hover:shadow-xl hover:shadow-brand/8 transition-all duration-300 group hover:-translate-y-1 bg-white">
@@ -1032,8 +1101,8 @@
                                         d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                                 </svg>
                             </div>
-                            <h4 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
-                                End-to-End Project Delivery</h4>
+                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
+                                End-to-End Project Delivery</h3>
                         </div>
                         <div
                             class="grad-border p-7 rounded-2xl hover:shadow-xl hover:shadow-brand/8 transition-all duration-300 group hover:-translate-y-1 bg-white">
@@ -1044,8 +1113,8 @@
                                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                             </div>
-                            <h4 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
-                                Proven Across 10+ Industries</h4>
+                            <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800 leading-relaxed">
+                                Proven Across 10+ Industries</h3>
                         </div>
                     </div>
                 </div>
@@ -1106,7 +1175,8 @@
                                                 tracking</p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_1_new.png" alt="End-User Devices"
+                                    <img src="images/services/svc_1_new.png" alt="End-User Devices" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1139,7 +1209,8 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_2_new.png" alt="Servers and Data Center"
+                                    <img src="images/services/svc_2_new.png" alt="Servers and Data Center" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1172,7 +1243,8 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_3_new.png" alt="Networking and Wi-Fi"
+                                    <img src="images/services/svc_3_new.png" alt="Networking and Wi-Fi" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1205,7 +1277,8 @@
                                                 environment</p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_4_new.png" alt="Cybersecurity"
+                                    <img src="images/services/svc_4_new.png" alt="Cybersecurity" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1237,7 +1310,8 @@
                                                 style="color:#e2e8f0">Digital signage &amp; AV for any environment</p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_5_new.png" alt="Cloud, CCTV and AV"
+                                    <img src="images/services/svc_5_new.png" alt="Cloud, CCTV and AV" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1269,7 +1343,8 @@
                                                 style="color:#e2e8f0">Backup &amp; DR to ensure business continuity</p>
                                         </div>
                                     </div>
-                                    <img src="images/services/svc_6_new.png" alt="ITSM and Backup DR"
+                                    <img src="images/services/svc_6_new.png" alt="ITSM and Backup DR" width="600"
+                                        height="600" loading="lazy" decoding="async"
                                         class="mt-5 w-full max-w-xs rounded-xl object-cover opacity-90">
                                 </div>
                             </div>
@@ -1837,7 +1912,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="text-slate-900 font-bold text-sm mb-1.5">End-to-End Capability</h5>
+                                    <h3 class="text-slate-900 font-bold text-sm mb-1.5">End-to-End Capability</h3>
                                     <p class="text-[11px] text-slate-500 leading-relaxed uppercase tracking-widest">One
                                         partner, one accountability — from cabling to SOC.</p>
                                 </div>
@@ -1852,7 +1927,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="text-slate-900 font-bold text-sm mb-1.5">Certified Engineering</h5>
+                                    <h3 class="text-slate-900 font-bold text-sm mb-1.5">Certified Engineering</h3>
                                     <p class="text-[11px] text-slate-500 leading-relaxed uppercase tracking-widest">
                                         Cisco, Microsoft, Fortinet, and VMware certified experts.</p>
                                 </div>
@@ -1867,7 +1942,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="text-slate-900 font-bold text-sm mb-1.5">Vendor-Agnostic</h5>
+                                    <h3 class="text-slate-900 font-bold text-sm mb-1.5">Vendor-Agnostic</h3>
                                     <p class="text-[11px] text-slate-500 leading-relaxed uppercase tracking-widest">
                                         Best-fit technology for your roadmap and budget.</p>
                                 </div>
@@ -1882,7 +1957,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="text-slate-900 font-bold text-sm mb-1.5">Proven Methodology</h5>
+                                    <h3 class="text-slate-900 font-bold text-sm mb-1.5">Proven Methodology</h3>
                                     <p class="text-[11px] text-slate-500 leading-relaxed uppercase tracking-widest">
                                         Assess → Design → Deploy → Test → Document → Support</p>
                                 </div>
@@ -1958,13 +2033,7 @@
 
                 <div class="grid md:grid-cols-3 gap-7">
                     <div class="testi-card p-9 reveal group" style="transition-delay:0ms">
-                        <div class="flex items-center gap-1 mb-6">
-                            <template x-for="i in 5"><svg class="w-4 h-4 text-amber-400" fill="currentColor"
-                                    viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg></template>
-                        </div>
+                        <div class="flex items-center gap-1 mb-6" data-stars aria-label="5 out of 5 stars"></div>
                         <p class="text-slate-600 text-sm leading-relaxed mb-8 font-medium italic">"Laser transformed our
                             entire IT infrastructure within budget and ahead of schedule. Their SOC team caught a threat
                             our old vendor missed entirely. Exceptional."</p>
@@ -1981,13 +2050,7 @@
                     </div>
 
                     <div class="testi-card p-9 reveal md:-translate-y-4 group" style="transition-delay:120ms">
-                        <div class="flex items-center gap-1 mb-6">
-                            <template x-for="i in 5"><svg class="w-4 h-4 text-amber-400" fill="currentColor"
-                                    viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg></template>
-                        </div>
+                        <div class="flex items-center gap-1 mb-6" data-stars aria-label="5 out of 5 stars"></div>
                         <p class="text-slate-600 text-sm leading-relaxed mb-8 font-medium italic">"Their vendor-agnostic
                             approach saved us significant cost without compromising performance. The team's expertise
                             across Cisco, Fortinet and Azure is genuinely impressive."</p>
@@ -2004,13 +2067,7 @@
                     </div>
 
                     <div class="testi-card p-9 reveal group" style="transition-delay:240ms">
-                        <div class="flex items-center gap-1 mb-6">
-                            <template x-for="i in 5"><svg class="w-4 h-4 text-amber-400" fill="currentColor"
-                                    viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg></template>
-                        </div>
+                        <div class="flex items-center gap-1 mb-6" data-stars aria-label="5 out of 5 stars"></div>
                         <p class="text-slate-600 text-sm leading-relaxed mb-8 font-medium italic">"We moved 5 branches
                             to a centrally managed cloud network in 3 weeks with zero downtime. Laser's project
                             management and post-deployment support are best in class."</p>
@@ -2146,32 +2203,32 @@
                     </div>
 
                     <div class="lg:col-span-3 reveal-r">
-                        <form
+                        <form id="contactForm"
                             class="bg-white p-10 md:p-14 rounded-[2rem] shadow-2xl shadow-slate-100/60 border border-slate-100 space-y-7">
                             <div class="grid md:grid-cols-2 gap-7">
                                 <div>
-                                    <label
+                                    <label for="contact-name"
                                         class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Full
                                         Name *</label>
-                                    <input type="text" placeholder="John Smith" class="form-field">
+                                    <input id="contact-name" type="text" name="name" placeholder="John Smith" class="form-field" required>
                                 </div>
                                 <div>
-                                    <label
+                                    <label for="contact-company"
                                         class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Company
                                         Name *</label>
-                                    <input type="text" placeholder="Acme Corporation" class="form-field">
+                                    <input id="contact-company" type="text" name="company" placeholder="Acme Corporation" class="form-field" required>
                                 </div>
                                 <div>
-                                    <label
+                                    <label for="contact-email"
                                         class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Email
                                         Address *</label>
-                                    <input type="email" placeholder="john@company.com" class="form-field">
+                                    <input id="contact-email" type="email" name="email" placeholder="john@company.com" class="form-field" required>
                                 </div>
                                 <div>
-                                    <label
+                                    <label for="contact-service"
                                         class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Service
                                         of Interest</label>
-                                    <select class="form-field">
+                                    <select id="contact-service" name="service" class="form-field" required>
                                         <option value="">Select a service…</option>
                                         <option>Cybersecurity</option>
                                         <option>Infrastructure Solutions</option>
@@ -2184,20 +2241,23 @@
                                 </div>
                             </div>
                             <div>
-                                <label
+                                <label for="contact-message"
                                     class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Message
                                     / Project Details *</label>
-                                <textarea rows="5"
+                                <textarea id="contact-message" name="message" rows="5"
                                     placeholder="Tell us about your project, current environment, or specific challenges…"
-                                    class="form-field resize-none"></textarea>
+                                    class="form-field resize-none" required></textarea>
                             </div>
-                            <button type="submit"
+
+                            <div id="formStatus" class="hidden p-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-center"></div>
+
+                            <button type="submit" id="submitBtn" aria-label="Send contact request"
                                 class="w-full py-5 bg-gradient-to-r from-brand to-brand-light text-white text-[10px] font-black uppercase tracking-[.3em] rounded-full shadow-xl shadow-brand/20 hover:shadow-brand/35 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-3">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                 </svg>
-                                Send My Request
+                                <span>Send My Request</span>
                             </button>
                         </form>
                     </div>
@@ -2213,19 +2273,19 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-y-16 gap-x-12 mb-20">
                 <div class="col-span-2">
-                    <img src="assets/logo.png" alt="Laser" class="h-10 w-auto mb-8 rounded-lg">
+                    <img src="assets/logo.png" alt="Laser" width="1172" height="392" loading="lazy" decoding="async" class="h-10 w-auto mb-8 rounded-lg">
                     <p class="text-[11px] text-slate-400 max-w-xs leading-loose font-medium uppercase tracking-widest">
                         Powering Business Through Technology — Your Trusted IT Partner in the Region.</p>
                     <div class="flex flex-wrap gap-3 mt-10">
-                        <a href="https://www.facebook.com/profile.php?id=61577381400686" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://www.facebook.com/profile.php?id=61577381400686" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                             </svg>
                         </a>
-                        <a href="https://www.instagram.com/laser_international_/" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://www.instagram.com/laser_international_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -2233,36 +2293,36 @@
                                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                             </svg>
                         </a>
-                        <a href="https://www.linkedin.com/company/107531158/admin/dashboard/" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://www.linkedin.com/company/107531158/admin/dashboard/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.238 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                             </svg>
                         </a>
-                        <a href="https://www.pinterest.com/laserinternational/_profile/" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://www.pinterest.com/laserinternational/_profile/" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.261 7.929-7.261 4.162 0 7.397 2.966 7.397 6.93 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
                             </svg>
                         </a>
-                        <a href="https://wa.link/bfwqfm" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://wa.link/bfwqfm" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                             </svg>
                         </a>
-                        <a href="https://www.youtube.com/@LaserKSA-o9" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://www.youtube.com/@LaserKSA-o9" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                             </svg>
                         </a>
-                        <a href="https://x.com/laserksa" target="_blank"
-                            class="w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center text-slate-400 hover:text-brand hover:bg-brand/5 transition-all group">
+                        <a href="https://x.com/laserksa" target="_blank" rel="noopener noreferrer" aria-label="X"
+                            class="social-link w-10 h-10 rounded-xl border border-slate-100 hover:border-brand/30 flex items-center justify-center hover:text-brand hover:bg-brand/5 transition-all group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -2272,8 +2332,8 @@
                 </div>
                 <div class="col-span-2 lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-10">
                     <div>
-                        <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Core Services
-                        </h5>
+                        <p class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Core Services
+                        </p>
                         <ul class="space-y-4 text-[10px] font-black text-slate-400 uppercase tracking-[.2em]">
                             <li><a href="#" class="hover:text-brand transition-colors">Firewall &amp; Cyber</a></li>
                             <li><a href="#" class="hover:text-brand transition-colors">Cloud &amp; Identity</a></li>
@@ -2283,7 +2343,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Company</h5>
+                        <p class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Company</p>
                         <ul class="space-y-4 text-[10px] font-black text-slate-400 uppercase tracking-[.2em]">
                             <li><a href="#about" class="hover:text-brand transition-colors">About Us</a></li>
                             <li><a href="#services" class="hover:text-brand transition-colors">Services</a></li>
@@ -2293,8 +2353,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Certifications
-                        </h5>
+                        <p class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-8">Certifications
+                        </p>
                         <ul class="space-y-4 text-[10px] font-black text-slate-400 uppercase tracking-[.2em]">
                             <li class="text-brand/80">ISO 27001</li>
                             <li>Cisco Partner</li>
@@ -2318,19 +2378,138 @@
     </footer>
 
     <script>
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const desktopPointer = window.matchMedia('(pointer: fine)').matches && window.innerWidth >= 1024;
+
+        // ── HEADER / HERO / MOBILE NAV ──
+        const body = document.body;
+        const siteHeader = document.getElementById('siteHeader');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenuIconOpen = document.getElementById('mobileMenuIconOpen');
+        const mobileMenuIconClose = document.getElementById('mobileMenuIconClose');
+
+        function syncHeader() {
+            if (!siteHeader) return;
+            if (window.pageYOffset > 60) {
+                siteHeader.classList.add('glass-header', 'py-3');
+                siteHeader.classList.remove('py-7');
+            } else {
+                siteHeader.classList.remove('glass-header', 'py-3');
+                siteHeader.classList.add('py-7');
+            }
+        }
+
+        function closeMobileMenu() {
+            if (!mobileMenu || !mobileMenuButton) return;
+            mobileMenu.hidden = true;
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+            mobileMenuButton.setAttribute('aria-label', 'Open navigation menu');
+            mobileMenuIconOpen.classList.remove('hidden');
+            mobileMenuIconClose.classList.add('hidden');
+        }
+
+        function toggleMobileMenu() {
+            if (!mobileMenu || !mobileMenuButton) return;
+            const isOpen = mobileMenu.hidden;
+            mobileMenu.hidden = !isOpen;
+            mobileMenuButton.setAttribute('aria-expanded', String(isOpen));
+            mobileMenuButton.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            mobileMenuIconOpen.classList.toggle('hidden', isOpen);
+            mobileMenuIconClose.classList.toggle('hidden', !isOpen);
+        }
+
+        syncHeader();
+        window.addEventListener('scroll', syncHeader, { passive: true });
+        mobileMenuButton?.addEventListener('click', toggleMobileMenu);
+        document.querySelectorAll('.mobile-nav-link').forEach(link => link.addEventListener('click', closeMobileMenu));
+
+        setTimeout(() => {
+            document.querySelectorAll('.hero-reveal').forEach(el => el.classList.add('hero-ready'));
+        }, 80);
+
+        // ── RATING STARS ──
+        const starMarkup = `
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`;
+        document.querySelectorAll('[data-stars]').forEach(el => { el.innerHTML = starMarkup; });
+
+        // ── IMAGE HINTS ──
+        const imageSizes = {
+            'assets/logo.png': [1172, 392],
+            'images/clients/Air_Products-1.png': [250, 100],
+            'images/clients/Al-Osais-1.png': [250, 100],
+            'images/clients/Maaden-1.png': [250, 100],
+            'images/clients/Shapoorji_Pallonji-1.png': [250, 100],
+            'images/clients/acciona.png': [250, 100],
+            'images/clients/aramco-1.png': [250, 100],
+            'images/clients/crcc-1.png': [250, 100],
+            'images/clients/daco-1.png': [250, 100],
+            'images/clients/lasren-1.png': [250, 100],
+            'images/clients/mathevon-1.png': [250, 100],
+            'images/clients/neom-1.png': [250, 100],
+            'images/clients/nesma.png': [250, 100],
+            'images/clients/roshn-1.png': [250, 100],
+            'images/clients/royal-commission-1.png': [250, 100],
+            'images/clients/sabic-1.png': [250, 100],
+            'images/clients/sinohydro.png': [250, 100],
+            'images/clients/spark.png': [250, 100],
+            'images/clients/tamimi.png': [250, 100],
+            'images/clients/Aljeathen.jpeg': [200, 200],
+            'images/clients/BinKhamis.png': [225, 225],
+            'images/clients/c1.png': [532, 540],
+            'images/clients/c2.png': [1074, 350],
+            'images/clients/c3.png': [554, 542],
+            'images/clients/c4.png': [852, 260]
+        };
+        document.querySelectorAll('img').forEach(img => {
+            const src = img.getAttribute('src');
+            const size = imageSizes[src];
+            if (size && !img.hasAttribute('width')) {
+                img.setAttribute('width', size[0]);
+                img.setAttribute('height', size[1]);
+            }
+            if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+            const hiddenParent = img.closest('[aria-hidden="true"]');
+            if (hiddenParent) img.alt = '';
+            if (src && src.startsWith('images/clients/')) img.setAttribute('loading', 'lazy');
+        });
+
         // ── CUSTOM CURSOR ──
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
-        let mx = 0, my = 0, rx = 0, ry = 0;
-        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px' });
-        function animRing() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing) }
-        animRing();
+        if (!desktopPointer || reduceMotion) {
+            body.classList.add('cursor-disabled');
+        } else {
+            const dot = document.getElementById('cursor-dot');
+            const ring = document.getElementById('cursor-ring');
+            let mx = 0, my = 0, rx = 0, ry = 0;
+            document.addEventListener('mousemove', e => {
+                mx = e.clientX;
+                my = e.clientY;
+                dot.style.left = mx + 'px';
+                dot.style.top = my + 'px';
+            });
+            function animRing() {
+                rx += (mx - rx) * .12;
+                ry += (my - ry) * .12;
+                ring.style.left = rx + 'px';
+                ring.style.top = ry + 'px';
+                requestAnimationFrame(animRing);
+            }
+            animRing();
+        }
 
         // ── SCROLL REVEAL ──
-        const ro = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target) } })
-        }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+        if (!reduceMotion) {
+            const ro = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target) } });
+            }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+        } else {
+            document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => el.classList.add('in'));
+        }
 
         // ── ANIMATED COUNTERS ──
         function animateCounter(el) {
@@ -2346,10 +2525,65 @@
             }
             requestAnimationFrame(step);
         }
-        const cro = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting && e.target.dataset.to) { animateCounter(e.target); cro.unobserve(e.target) } })
-        }, { threshold: .5 });
-        document.querySelectorAll('.counter').forEach(el => cro.observe(el));
+        if (!reduceMotion) {
+            const cro = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting && e.target.dataset.to) { animateCounter(e.target); cro.unobserve(e.target); } });
+            }, { threshold: .5 });
+            document.querySelectorAll('[data-to]').forEach(el => cro.observe(el));
+        } else {
+            document.querySelectorAll('[data-to]').forEach(el => {
+                el.textContent = `${el.dataset.to}${el.dataset.suffix || ''}`;
+            });
+        }
+
+        // ── FORM SUBMISSION ──
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = submitBtn.querySelector('span');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Reset Status
+                formStatus.className = 'hidden p-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-center';
+                formStatus.textContent = '';
+
+                // UI Loading State
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
+                submitBtnText.textContent = 'Sending...';
+
+                try {
+                    const formData = new FormData(contactForm);
+                    const response = await fetch('contact.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    formStatus.classList.remove('hidden');
+                    if (result.status === 'success') {
+                        formStatus.classList.add('bg-teal-50', 'text-teal-600');
+                        formStatus.textContent = 'Message Sent Successfully!';
+                        contactForm.reset();
+                    } else {
+                        formStatus.classList.add('bg-red-50', 'text-red-500');
+                        formStatus.textContent = result.message || 'Transmission Error. Please Try Again.';
+                    }
+                } catch (error) {
+                    formStatus.classList.remove('hidden');
+                    formStatus.classList.add('bg-red-50', 'text-red-500');
+                    formStatus.textContent = 'Network Error. Please Check Your Connection.';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtnText.textContent = 'Send My Request';
+                }
+            });
+        }
     </script>
 </body>
 
