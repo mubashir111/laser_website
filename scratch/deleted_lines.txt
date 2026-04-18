@@ -1,0 +1,664 @@
+-    <script src="https://cdn.tailwindcss.com"></script>
+-    <script>
+-        tailwind.config = {
+-            theme: {
+-                extend: {
+-                    colors: {
+-                        brand: '#0d9488', 'brand-light': '#14b8a6', 'brand-dark': '#0a7870',
+-                        accent: '#be123b', 'accent-light': '#e11d48',
+-                    },
+-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+-                }
+-            }
+-        }
+-    </script>
+-    <style>
+-        *,
+-        *::before,
+-        *::after {
+-            box-sizing: border-box
+-        }
+-
+-        html {
+-            scroll-behavior: smooth
+-        }
+-
+-        body {
+-            background: #F8FAFC;
+-            color: #334155;
+-            overflow-x: hidden;
+-            -webkit-font-smoothing: antialiased;
+-            cursor: none
+-        }
+-
+-        body.cursor-disabled {
+-            cursor: auto
+-        }
+-
+-        body.cursor-disabled #cursor-dot,
+-        body.cursor-disabled #cursor-ring {
+-            display: none
+-        }
+-
+-        /* ── CUSTOM CURSOR ── */
+-        #cursor-dot {
+-            width: 8px;
+-            height: 8px;
+-            background: #0d9488;
+-            border-radius: 50%;
+-            position: fixed;
+-            top: 0;
+-            left: 0;
+-            pointer-events: none;
+-            z-index: 9999;
+-            transform: translate(-50%, -50%);
+-            transition: transform .1s ease;
+-        }
+-
+-        #cursor-ring {
+-            width: 36px;
+-            height: 36px;
+-            border: 2px solid rgba(13, 148, 136, .45);
+-            border-radius: 50%;
+-            position: fixed;
+-            top: 0;
+-            left: 0;
+-            pointer-events: none;
+-            z-index: 9998;
+-            transform: translate(-50%, -50%);
+-            transition: transform .12s ease, width .25s ease, height .25s ease, opacity .25s ease, border-color .25s ease;
+-        }
+-
+-        body:has(a:hover) #cursor-ring,
+-        body:has(button:hover) #cursor-ring {
+-            width: 54px;
+-            height: 54px;
+-            border-color: rgba(13, 148, 136, .7);
+-        }
+-
+-        /* ── GRID BG ── */
+-        .grid-bg {
+-            position: fixed;
+-            inset: 0;
+-            background-image: linear-gradient(rgba(15, 23, 42, .022) 1px, transparent 1px),
+-                linear-gradient(90deg, rgba(15, 23, 42, .022) 1px, transparent 1px);
+-            background-size: 68px 68px;
+-            pointer-events: none;
+-            z-index: 0;
+-        }
+-
+-        /* ── ORBS ── */
+-        .orb {
+-            position: absolute;
+-            border-radius: 50%;
+-            filter: blur(90px);
+-            pointer-events: none
+-        }
+-
+-        .orb-teal {
+-            width: 900px;
+-            height: 900px;
+-            background: radial-gradient(circle, rgba(13, 148, 136, .13) 0%, transparent 68%)
+-        }
+-
+-        .orb-red {
+-            width: 700px;
+-            height: 700px;
+-            background: radial-gradient(circle, rgba(190, 18, 59, .09) 0%, transparent 68%)
+-        }
+-
+-        .orb-indigo {
+-            width: 600px;
+-            height: 600px;
+-            background: radial-gradient(circle, rgba(99, 102, 241, .07) 0%, transparent 68%)
+-        }
+-
+-        /* ── GLASS ── */
+-        .glass {
+-            background: rgba(255, 255, 255, .72);
+-            backdrop-filter: blur(20px) saturate(180%);
+-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+-            border: 1px solid rgba(255, 255, 255, .85)
+-        }
+-
+-        .glass-dark {
+-            background: rgba(15, 23, 42, .65);
+-            backdrop-filter: blur(20px) saturate(180%);
+-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+-            border: 1px solid rgba(255, 255, 255, .07)
+-        }
+-
+-        .glass-header {
+-            background: rgba(248, 250, 252, .88);
+-            backdrop-filter: blur(24px) saturate(200%);
+-            -webkit-backdrop-filter: blur(24px) saturate(200%);
+-            border-bottom: 1px solid rgba(15, 23, 42, .06);
+-            box-shadow: 0 1px 40px rgba(0, 0, 0, .05)
+-        }
+-
+-        /* ── GRADIENT TEXT ── */
+-        .grad-teal {
+-            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 40%, #06b6d4 100%);
+-            -webkit-background-clip: text;
+-            -webkit-text-fill-color: transparent;
+-            background-clip: text
+-        }
+-
+-        .grad-warm {
+-            background: linear-gradient(135deg, #be123b 0%, #e11d48 60%, #f43f5e 100%);
+-            -webkit-background-clip: text;
+-            -webkit-text-fill-color: transparent;
+-            background-clip: text
+-        }
+-
+-        /* ── SECTION LABEL ── */
+-        .chip {
+-            display: inline-flex;
+-            align-items: center;
+-            gap: 8px;
+-            padding: 5px 16px;
+-            background: linear-gradient(135deg, rgba(13, 148, 136, .1), rgba(13, 148, 136, .04));
+-            border: 1px solid rgba(13, 148, 136, .18);
+-            border-radius: 999px;
+-            font-size: 10px;
+-            font-weight: 900;
+-            text-transform: uppercase;
+-            letter-spacing: .38em;
+-            color: #0d9488
+-        }
+-
+-        /* ── LIVE DOT ── */
+-        .live-dot {
+-            width: 7px;
+-            height: 7px;
+-            background: #10b981;
+-            border-radius: 50%;
+-            animation: livePulse 2s infinite
+-        }
+-
+-        @keyframes livePulse {
+-            0% {
+-                box-shadow: 0 0 0 0 rgba(16, 185, 129, .5)
+-            }
+-
+-            70% {
+-                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0)
+-            }
+-
+-            100% {
+-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0)
+-            }
+-        }
+-
+-        /* ── HERO TEXT REVEAL ── */
+-        .hero-word {
+-            display: inline-block;
+-            overflow: hidden;
+-            vertical-align: bottom
+-        }
+-
+-        .hero-word span {
+-            display: inline-block;
+-            transform: translateY(110%);
+-            animation: wordUp .8s cubic-bezier(.16, 1, .3, 1) forwards
+-        }
+-
+-        @keyframes wordUp {
+-            to {
+-                transform: translateY(0)
+-            }
+-        }
+-
+-        /* ── HERO FLOAT CARDS ── */
+-        @keyframes floatCard {
+-
+-            0%,
+-            100% {
+-                transform: translateY(0)
+-            }
+-
+-            50% {
+-                transform: translateY(-10px)
+-            }
+-        }
+-
+-        .float-card-1 {
+-            animation: floatCard 5s ease-in-out infinite
+-        }
+-
+-        .float-card-2 {
+-            animation: floatCard 6s ease-in-out infinite 1.5s
+-        }
+-
+-        .float-card-3 {
+-            animation: floatCard 4.5s ease-in-out infinite .8s
+-        }
+-
+-        /* ── MAP DRAW ── */
+-        @keyframes drawPath {
+-            from {
+-                stroke-dashoffset: 1
+-            }
+-
+-            to {
+-                stroke-dashoffset: 0
+-            }
+-        }
+-
+-        .draw-path {
+-            animation: drawPath 3s ease-out forwards
+-        }
+-
+-        /* ── REVEAL ── */
+-        .reveal {
+-            opacity: 0;
+-            transform: translateY(40px);
+-            transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .85s cubic-bezier(.4, 0, .2, 1)
+-        }
+-
+-        .reveal-l {
+-            opacity: 0;
+-            transform: translateX(-40px);
+-            transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .85s cubic-bezier(.4, 0, .2, 1)
+-        }
+-
+-        .reveal-r {
+-            opacity: 0;
+-            transform: translateX(40px);
+-            transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .85s cubic-bezier(.4, 0, .2, 1)
+-        }
+-
+-        .reveal.in,
+-        .reveal-l.in,
+-        .reveal-r.in {
+-            opacity: 1;
+-            transform: translate(0)
+-        }
+-
+-        /* ── CARDS ── */
+-        .s-card {
+-            background: #fff;
+-            border: 1px solid rgba(15, 23, 42, .06);
+-            box-shadow: 0 2px 8px rgba(0, 0, 0, .035);
+-            transition: all .4s cubic-bezier(.4, 0, .2, 1);
+-            position: relative;
+-            overflow: hidden
+-        }
+-
+-        .s-card::before {
+-            content: '';
+-            position: absolute;
+-            inset: 0;
+-            background: linear-gradient(135deg, rgba(13, 148, 136, .05) 0%, transparent 55%);
+-            opacity: 0;
+-            transition: opacity .4s ease
+-        }
+-
+-        .s-card:hover {
+-            box-shadow: 0 28px 56px rgba(0, 0, 0, .09), 0 8px 20px rgba(13, 148, 136, .1);
+-            transform: translateY(-7px);
+-            border-color: rgba(13, 148, 136, .22)
+-        }
+-
+-        .s-card:hover::before {
+-            opacity: 1
+-        }
+-
+-        /* ── SHIMMER ── */
+-        .shimmer::after {
+-            content: '';
+-            position: absolute;
+-            top: 0;
+-            left: -100%;
+-            width: 50%;
+-            height: 100%;
+-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
+-            transform: skewX(-20deg);
+-            transition: none
+-        }
+-
+-        .shimmer:hover::after {
+-            animation: shimmerSlide .7s ease forwards
+-        }
+-
+-        @keyframes shimmerSlide {
+-            0% {
+-                left: -100%
+-            }
+-
+-            100% {
+-                left: 200%
+-            }
+-        }
+-
+-        /* ── ICON BOX ── */
+-        .icon-box {
+-            width: 52px;
+-            height: 52px;
+-            border-radius: 14px;
+-            display: flex;
+-            align-items: center;
+-            justify-content: center;
+-            transition: transform .3s ease
+-        }
+-
+-        .s-card:hover .icon-box {
+-            transform: scale(1.12) rotate(-4deg)
+-        }
+-
+-        /* ── SERVICES ANIMS ── */
+-        .svc-step {
+-            cursor: pointer;
+-        }
+-
+-        .svc-bar,
+-        .svc-num,
+-        .svc-title,
+-        .svc-text,
+-        .svc-dot {
+-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+-        }
+-
+-        .svc-panel {
+-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+-        }
+-
+-        .marquee-track {
+-            display: flex;
+-            width: max-content;
+-            animation: marquee 28s linear infinite
+-        }
+-
+-        .marquee-track:hover {
+-            animation-play-state: paused
+-        }
+-
+-        @keyframes marquee {
+-            0% {
+-                transform: translateX(0)
+-            }
+-
+-            100% {
+-                transform: translateX(-50%)
+-            }
+-        }
+-
+-        /* ── DIFF CARD ── */
+-        .diff-card {
+-            background: #f8fafc;
+-            border: 1px solid rgba(15, 23, 42, .07);
+-            transition: all .3s ease
+-        }
+-
+-        .diff-card:hover {
+-            background: rgba(13, 148, 136, .06);
+-            border-color: rgba(13, 148, 136, .25);
+-            transform: translateX(8px)
+-        }
+-
+-        /* ── INDUSTRY PILL ── */
+-        .ind-pill {
+-            background: #ffffff;
+-            border: 1px solid rgba(15, 23, 42, .08);
+-            transition: all .3s ease;
+-            cursor: default
+-        }
+-
+-        .ind-pill:hover {
+-            background: rgba(13, 148, 136, .08);
+-            border-color: rgba(13, 148, 136, .3);
+-            color: #0d9488;
+-            transform: scale(1.04)
+-        }
+-
+-        /* ── DIAGONAL DIVIDER ── */
+-        .diag-bottom {
+-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%)
+-        }
+-
+-        .diag-top {
+-            clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%)
+-        }
+-
+-        /* ── STAT RING ── */
+-        .stat-ring {
+-            position: relative;
+-            display: inline-flex;
+-            align-items: center;
+-            justify-content: center
+-        }
+-
+-        .stat-ring::before {
+-            content: '';
+-            position: absolute;
+-            inset: -2px;
+-            border-radius: 50%;
+-            background: conic-gradient(#0d9488 var(--p, 0%), rgba(13, 148, 136, .1) 0%);
+-            border-radius: 50%;
+-            padding: 3px
+-        }
+-
+-        /* ── TESTIMONIAL ── */
+-        .testi-card {
+-            background: #fff;
+-            border: 1px solid rgba(15, 23, 42, .07);
+-            box-shadow: 0 4px 24px rgba(0, 0, 0, .05);
+-            border-radius: 24px;
+-            transition: all .4s ease
+-        }
+-
+-        .testi-card:hover {
+-            transform: translateY(-5px);
+-            box-shadow: 0 24px 48px rgba(0, 0, 0, .1), 0 8px 16px rgba(13, 148, 136, .08);
+-            border-color: rgba(13, 148, 136, .2)
+-        }
+-
+-        /* ── GRADIENT BORDER ── */
+-        .grad-border {
+-            border: 1px solid transparent;
+-            background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, rgba(13, 148, 136, .35), rgba(13, 148, 136, .06)) border-box
+-        }
+-
+-        /* ── GLOW BUTTON ── */
+-        .btn-glow {
+-            position: relative;
+-            overflow: hidden
+-        }
+-
+-        .btn-glow::before {
+-            content: '';
+-            position: absolute;
+-            inset: -2px;
+-            border-radius: inherit;
+-            background: linear-gradient(135deg, #14b8a6, #0d9488, #14b8a6);
+-            background-size: 200% 200%;
+-            animation: borderSpin 4s linear infinite;
+-            z-index: -1
+-        }
+-        @keyframes borderSpin {
+-            0% {
+-                background-position: 0% 50%
+-            }
+-
+-            50% {
+-                background-position: 100% 50%
+-            }
+-
+-            100% {
+-                background-position: 0% 50%
+-            }
+-        }
+-
+-        /* ── FORM ── */
+-        .form-field {
+-            background: #f8fafc;
+-            border: 1.5px solid #e2e8f0;
+-            border-radius: 12px;
+-            padding: 14px 16px;
+-            font-size: 14px;
+-            width: 100%;
+-            transition: all .2s ease;
+-            outline: none
+-        }
+-
+-        .form-field:focus {
+-            border-color: rgba(13, 148, 136, .5);
+-            box-shadow: 0 0 0 4px rgba(13, 148, 136, .09);
+-            background: #fff
+-        }
+-
+-        .form-field::placeholder {
+-            color: #94a3b8
+-        }
+-
+-        /* ── SCROLL BOUNCE ── */
+-        @keyframes scrollBounce {
+-
+-            0%,
+-            100% {
+-                transform: translateY(0)
+-            }
+-
+-            50% {
+-                transform: translateY(6px)
+-            }
+-        }
+-
+-        .scroll-anim {
+-            animation: scrollBounce 1.6s ease-in-out infinite
+-        }
+-
+-        /* ── DARK GRID ── */
+-        .dark-grid {
+-            background-image: linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+-            background-size: 56px 56px
+-        }
+-
+-        /* ── PROCESS STEP LINE ── */
+-        .process-line {
+-            position: relative
+-        }
+-
+-        .process-line:not(:last-child)::after {
+-            content: '';
+-            position: absolute;
+-            top: 26px;
+-            left: 50%;
+-            width: 100%;
+-            height: 1px;
+-            background: linear-gradient(90deg, rgba(13, 148, 136, .4), rgba(13, 148, 136, .05));
+-            transform: translateX(0)
+-        }
+-
+-        /* ── COUNTER ── */
+-        .counter {
+-            display: inline-block
+-        }
+-
+-        /* ── NAV UNDERLINE ── */
+-        .nav-link {
+-            position: relative
+-        }
+-
+-        .nav-link::after {
+-            content: '';
+-            position: absolute;
+-            bottom: -3px;
+-            left: 0;
+-            width: 0;
+-            height: 2px;
+-            background: linear-gradient(90deg, #0d9488, #14b8a6);
+-            border-radius: 999px;
+-            transition: width .3s ease
+-        }
+-
+-        .nav-link:hover::after {
+-            width: 100%
+-        }
+-
+-        .social-link {
+-            color: #475569
+-        }
+-
+-        .hero-ready {
+-            opacity: 1 !important;
+-            transform: translateY(0) !important
+-        }
+-
+-        @media (pointer: coarse),
+-        (prefers-reduced-motion: reduce) {
+-            html {
+-                scroll-behavior: auto
+-            }
+-
+-            body {
+-                cursor: auto
+-            }
+-
+-            *,
+-            *::before,
+-            *::after {
+-                animation-duration: .01ms !important;
+-                animation-iteration-count: 1 !important;
+-                transition-duration: .01ms !important;
+-                scroll-behavior: auto !important
+-            }
+-        }
+-    </style>
+-                    <img src="assets/map.svg" alt="" aria-hidden="true" fetchpriority="low"
+-                        <img src="images/clients/Air_Products-1.png" alt="Air Products"
+-                        <img src="images/clients/Al-Osais-1.png" alt="Al-Osais" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Maaden-1.png" alt="Maaden" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Shapoorji_Pallonji-1.png" alt="Shapoorji Pallonji"
+-                        <img src="images/clients/acciona.png" alt="Acciona" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/aramco-1.png" alt="Aramco" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/crcc-1.png" alt="CRCC" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/daco-1.png" alt="DACO" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/lasren-1.png" alt="Lasren" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/mathevon-1.png" alt="Mathevon" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/neom-1.png" alt="NEOM" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/nesma.png" alt="Nesma" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/roshn-1.png" alt="Roshn" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/royal-commission-1.png" alt="Royal Commission"
+-                        <img src="images/clients/sabic-1.png" alt="SABIC" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/sinohydro.png" alt="Sinohydro" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/spark.png" alt="Spark" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/tamimi.png" alt="Tamimi" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Aljeathen.jpeg" alt="Aljeathen" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/BinKhamis.png" alt="Bin Khamis" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c1.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c2.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c3.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c4.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Air_Products-1.png" alt="Air Products"
+-                        <img src="images/clients/Al-Osais-1.png" alt="Al-Osais" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Maaden-1.png" alt="Maaden" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Shapoorji_Pallonji-1.png" alt="Shapoorji Pallonji"
+-                        <img src="images/clients/acciona.png" alt="Acciona" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/aramco-1.png" alt="Aramco" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/crcc-1.png" alt="CRCC" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/daco-1.png" alt="DACO" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/lasren-1.png" alt="Lasren" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/mathevon-1.png" alt="Mathevon" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/neom-1.png" alt="NEOM" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/nesma.png" alt="Nesma" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/roshn-1.png" alt="Roshn" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/royal-commission-1.png" alt="Royal Commission"
+-                        <img src="images/clients/sabic-1.png" alt="SABIC" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/sinohydro.png" alt="Sinohydro" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/spark.png" alt="Spark" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/tamimi.png" alt="Tamimi" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/Aljeathen.jpeg" alt="Aljeathen" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/BinKhamis.png" alt="Bin Khamis" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c1.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c2.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c3.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                        <img src="images/clients/c4.png" alt="Client Logo" class="h-14 w-auto object-contain">
+-                dot.style.left = mx + 'px';
+-                dot.style.top = my + 'px';
+-            });
+-                rx += (mx - rx) * .12;
+-                ry += (my - ry) * .12;
+-                ring.style.left = rx + 'px';
+-                ring.style.top = ry + 'px';
+-            animRing();
